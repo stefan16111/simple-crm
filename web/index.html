@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl" ng-app="crmApp">
+    <head>
+        <base href="/simple_crm/web/">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>SuperCRM</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin-ext' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:300,200,100' rel='stylesheet' type='text/css'>
+
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+
+        <div id="outer-wrapper">
+            <div id="sidebar">
+                <div class="semifluid-layout">
+                    <div class="btn-rwd-menu">
+                        <i class="fa fa-bars"></i>
+                    </div>
+                    <div class="sidebar-logo">
+                        <a href="#">Super-CRM</a>
+                    </div>
+                    <nav class="sidebar-navigation">
+                        <ul>
+                            <li class="active">
+                                <a href="/simple_crm/web/#/clients">
+                                    <i class="fa fa-users"></i>
+                                    <span>Klienci</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/simple_crm/web/#/sectors">
+                                    <i class="fa fa-database"></i>
+                                    <span>Branże</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/simple_crm/web/#/users">
+                                    <i class="fa fa-cogs"></i>
+                                    <span>Użytkownicy systemu</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="sidebar-copyrights">
+                        Copyright &copy; Eduweb 2015
+                    </div>
+                </div>
+            </div>
+
+            <div id="main">
+                <div class="main-header navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-xs-6 user-area">
+                                <ul class="nav navbar-nav navbar-right user-nav">
+                                    <li class="profile_menu ">
+                                        <a href="#">
+                                            <img src="img/user-avatar.jpg" alt="Maciej Żukiewicz">
+                                            <span>Maciej Żukiewicz</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-content container-fluid">
+                    <div class="row">
+                        <div class="breadcrumb">
+                            <ul>
+                                <li class="active">
+                                    <span>Lista klientów</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- content -->
+                    <div ng-view>
+                    </div>
+                    <!-- /content -->
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
