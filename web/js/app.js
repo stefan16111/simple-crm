@@ -1,11 +1,12 @@
 (function () {
 
-    var app = angular.module('crmApp', ['ngRoute']);
+    var app = angular.module('crmApp', ['ngRoute', 'crmService']);
 
     app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
             $routeProvider
                     .when('/clients', {
+                        controller: 'ClientsListCtrl',
                         templateUrl: 'views/clients-list.html'
                     })
                     .when('/sectors', {
@@ -18,7 +19,14 @@
                         redirectTo: '/clients'
                     });
 
-
             $locationProvider.html5Mode(true).hashPrefix('');
         }]);
+    
+    app.controller('ClientsListCtrl', ['$scope', 'clients', function ($scope, clients){
+        $scope.clients = []; 
+        clients.getClients(function (clients){
+            $scope.clients = clients.data;
+        });
+    }]);
+
 })();
