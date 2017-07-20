@@ -13,7 +13,7 @@
                                 <label for="filter-company-name" class="col-sm-3 col-xs-12 control-label">Wyszukaj</label>
 
                                 <div class="col-sm-9 col-xs-12">
-                                    <input id="filter-company-name" type="text" class="form-control" placeholder="Podaj nazwę firmy">
+                                    <input id="filter-company-name" ng-model="filterBy.company_name" type="text" class="form-control" placeholder="Podaj nazwę firmy">
                                 </div>
                             </div>
                         </div>
@@ -64,34 +64,34 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 70px;">
-                                <span class="sort-btn">
+                                <span ng-click="changeOrder('id')" class="sort-btn">
                                     ID
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
+                                    <i ng-show="isOrderedBy('id')" class="glyphicon" ng-class="{'glyphicon-chevron-up': !orderedReverse(), 'glyphicon-chevron-down': orderedReverse()}"></i>
                                 </span>
                             </th>
                             <th>
-                                <span class="sort-btn">
+                                <span ng-click="changeOrder('company_name')" class="sort-btn">
                                     Nazwa firmy
-                                    <i class="glyphicon glyphicon-chevron-down"></i>
+                                    <i ng-show="isOrderedBy('company_name')" class="glyphicon" ng-class="{'glyphicon-chevron-up': !orderedReverse(), 'glyphicon-chevron-down': orderedReverse()}"></i>
                                 </span>
                             </th>
                             <th class="hidden-xs">
-                                <span class="sort-btn">
+                                <span ng-click="changeOrder('sector_name')" class="sort-btn">
                                     Branża
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
+                                    <i ng-show="isOrderedBy('sector_name')" class="glyphicon" ng-class="{'glyphicon-chevron-up': !orderedReverse(), 'glyphicon-chevron-down': orderedReverse()}"></i>
                                 </span>
                             </th>
                             <th class="hidden-xs">
-                                <span class="sort-btn">
+                                <span ng-click="changeOrder('contact_name')" class="sort-btn">
                                     Opiekun klienta
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
+                                    <i ng-show="isOrderedBy('contact_name')" class="glyphicon" ng-class="{'glyphicon-chevron-up': !orderedReverse(), 'glyphicon-chevron-down': orderedReverse()}"></i>
                                 </span>
                             </th>
                             <th class="text-center">Akcje</th>
                         </tr>
                     </thead>
                     <tbody class="no-border">
-                        <tr ng-repeat="client in clients">
+                        <tr ng-repeat="client in clients | filter: filterBy | orderBy: orderByColumn : orderByDir">
                             <td class="text-center">{{ client.id }}</td>
                             <td>{{ client.company_name }}</td>
                             <td class="hidden-xs">{{ client.sector_name }}</td>
