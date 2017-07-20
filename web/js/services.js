@@ -50,7 +50,7 @@
 
                 $http({
                     method: 'GET',
-                    url: '/simple_crm/web/api.php/sectors'
+                    url: '/simple_crm/web/api.php/company-sectors'
                 }).then(function (data) {
                     callback(data);
                 }, function (error) {

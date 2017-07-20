@@ -23,8 +23,9 @@
                                 <label for="filter-sector" class="col-sm-3 col-xs-12 control-label required">Branża</label>
 
                                 <div class="col-sm-9 col-xs-12">
-                                    <select id="filter-sector" class="form-control" >
+                                    <select ng-model="filterBy.sector_id" id="filter-sector" class="form-control" >
                                         <option value=""></option>
+                                        <option ng-repeat="sector in sectors" value="{{ sector.id}}">{{ sector.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -35,8 +36,9 @@
                                 <label for="filter-manager" class="col-sm-3 col-xs-12 control-label required">Opiekun klienta</label>
 
                                 <div class="col-sm-9 col-xs-12">
-                                    <select id="filter-manager" class="form-control">
+                                    <select ng-model="filterBy.account_manager_id" id="filter-manager" class="form-control">
                                         <option value=""></option>
+                                        <option ng-repeat="user in users" value="{{ user.id}}">{{ user.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -82,20 +84,20 @@
                                 </span>
                             </th>
                             <th class="hidden-xs">
-                                <span ng-click="changeOrder('contact_name')" class="sort-btn">
+                                <span ng-click="changeOrder('account_manager_name')" class="sort-btn">
                                     Opiekun klienta
-                                    <i ng-show="isOrderedBy('contact_name')" class="glyphicon" ng-class="{'glyphicon-chevron-up': !orderedReverse(), 'glyphicon-chevron-down': orderedReverse()}"></i>
+                                    <i ng-show="isOrderedBy('account_manager_name')" class="glyphicon" ng-class="{'glyphicon-chevron-up': !orderedReverse(), 'glyphicon-chevron-down': orderedReverse()}"></i>
                                 </span>
                             </th>
                             <th class="text-center">Akcje</th>
                         </tr>
                     </thead>
                     <tbody class="no-border">
-                        <tr ng-repeat="client in clients | filter: filterBy | orderBy: orderByColumn : orderByDir">
-                            <td class="text-center">{{ client.id }}</td>
-                            <td>{{ client.company_name }}</td>
-                            <td class="hidden-xs">{{ client.sector_name }}</td>
-                            <td class="hidden-xs">{{ client.contact_name }}</td>
+                        <tr ng-repeat="client in clients| filter: filterBy | orderBy: orderByColumn : orderByDir">
+                            <td class="text-center">{{ client.id}}</td>
+                            <td>{{ client.company_name}}</td>
+                            <td class="hidden-xs">{{ client.sector_name}}</td>
+                            <td class="hidden-xs">{{ client.account_manager_name}}</td>
                             <td class="text-center"><a href="#" class="label label-primary">Szczegóły</a></td>
                         </tr>
                     </tbody>
