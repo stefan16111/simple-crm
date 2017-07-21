@@ -1,6 +1,6 @@
 (function () {
 
-    var app = angular.module('crmApp', ['ngRoute', 'crmService']);
+    var app = angular.module('crmApp', ['ngRoute', 'crmService', 'ngMessages']);
 
     app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
@@ -8,6 +8,10 @@
                     .when('/clients', {
                         controller: 'ClientsListCtrl',
                         templateUrl: 'views/clients-list.html'
+                    })
+                    .when('/clients/:clientId', {
+                        controller: 'ClientDetailCtrl',
+                        templateUrl: 'views/client-details.html'
                     })
                     .when('/sectors', {
                         templateUrl: 'views/sectors-list.html'
@@ -59,8 +63,58 @@
             $scope.orderedReverse = function () {
                 return !$scope.orderByDir;
             };
-
-
         }]);
 
+    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', function ($scope, clients, users, sectors, $routeParams, $timeout) {
+
+            $scope.client = {};
+            $scope.clientNotFound = false;
+            $scope.users = [];
+            $scope.sectors = [];
+            $scope.showSaveClientFormMsg = false;
+
+            clients.getClient($routeParams.clientId)
+                    .then(
+                            function (success) {
+                                $scope.client = success.data;
+                                //console.log(success.data);
+                            },
+                            function (error) {
+                                if (404 == error.status) {
+                                    $scope.clientNotFound = true;
+                                }
+                            }
+                    );
+
+            users.getUsers(function (users) {
+                $scope.users = users.data;
+            });
+
+            sectors.getSectors(function (sectors) {
+                $scope.sectors = sectors.data;
+            });
+
+            $scope.saveClientData = function () {
+                if ($scope.clientForm.$invalid)
+                    return;
+
+                clients.updateClient($scope.client.id, $scope.client)
+                        .then(
+                                function (success) {
+                                    $scope.showSaveClientFormMsg = true;
+                                    
+                                    $timeout(function () {
+                                        $scope.showSaveClientFormMsg = false;
+                                    }, 5000);
+                                    //console.log(success.data);
+                                },
+                                function (error) {
+                                    console.log(error);
+                                }
+                        );
+            };
+            
+            
+
+        }]);
 })();
