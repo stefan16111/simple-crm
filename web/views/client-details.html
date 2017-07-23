@@ -140,7 +140,7 @@
             </div>
             <div class="flat-panel-body">
 
-                <form name="eventForm" ng-submit="addEventTimeline()" class="form-horizontal" novalidate>
+                <form name="eventForm" ng-submit="addEvent()" class="form-horizontal" novalidate>
                     <div ng-show="newEventCreatedMsg" class="alert alert-success">
                         <strong>Sukces!</strong> Nowe wydarzenie zostało dodane do osi czasu!
                     </div>
@@ -170,7 +170,7 @@
 
                         <div class="col-lg-10 col-sm-10 col-xs-12">
                             <select id="contact-type" name="contactType" ng-model="timelineEvent.contact_type" class="form-control" required>
-                                <option ng-repeat="type in eventType" value="{{ type.value}}">{{type.name}}</option>
+                                <option ng-repeat="type in eventTypes" value="{{ type.value}}">{{type.name}}</option>
                             </select>
 
                             <i class="glyphicon glyphicon-asterisk"></i>

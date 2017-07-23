@@ -63,6 +63,26 @@
             $scope.orderedReverse = function () {
                 return !$scope.orderByDir;
             };
+
+            $scope.addEvent = function () {
+
+                if ($scope.eventForm.$invalid)
+                    return;
+
+                timeline.addTimelineEvent($scope.client.id, $scope.timelineEvent, function (timeline) {
+                    $scope.timeline = timeline;
+                    $scope.timelineEvent = {};
+
+                    $scope.newEventCreatedMsg = true;
+                    $scope.eventForm.$setUntouched();
+                    $scope.eventForm.$submitted = false;
+
+                    $timeout(function () {
+                        $scope.newEventCreatedMsg = false;
+                    }, 5000);
+                });
+
+            };
         }]);
 
     app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', 'timeline',
@@ -75,7 +95,7 @@
             $scope.timeline = [];
             $scope.timelineHelper = timeline.getTimelineHelper();
             $scope.timelineEvent = {};
-            $scope.eventType = timeline.getEventsType();
+            $scope.eventTypes = timeline.getEventsType();
             $scope.newEventCreatedMsg = false;
 
             $scope.clientNotFound = false;
@@ -128,23 +148,29 @@
                                 }
                         );
             };
-            $scope.addEventTimeline = function () {
+
+            $scope.addEvent = function () {
 
                 if ($scope.eventForm.$invalid)
                     return;
 
-                timeline.addTimelineEvent($scope.client.id, $scope.timelineEvent, function (timeline) {
-                    $scope.timeline = timeline;
-                    $scope.timelineEvent = {};
+                timeline.addTimelineEvent($scope.client.id, $scope.timelineEvent)
+                        .then(
+                                function () {
+                                    $scope.timeline = timeline;
+                                    $scope.timelineEvent = {};
 
-                    $scope.newEventCreatedMsg = true;
-                    $scope.eventForm.$setUntouched();
-                    $scope.eventForm.$submitted = false;
+                                    $scope.newEventCreatedMsg = true;
+                                    $scope.eventForm.$setUntouched();
+                                    $scope.eventForm.$submitted = false;
 
-                    $timeout(function () {
-                        $scope.newEventCreatedMsg = false;
-                    }, 5000);
-                });
+                                    $timeout(function () {
+                                        $scope.newEventCreatedMsg = false;
+                                    }, 5000);
+                                },
+                                function (error){
+                                    console.log(error);
+                                });
 
             };
 
