@@ -65,19 +65,29 @@
             };
         }]);
 
-    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', function ($scope, clients, users, sectors, $routeParams, $timeout) {
+    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', 'timeline',
+        function ($scope, clients, users, sectors, $routeParams, $timeout, timeline) {
 
             $scope.client = {};
             $scope.clientNotFound = false;
             $scope.users = [];
             $scope.sectors = [];
             $scope.showSaveClientFormMsg = false;
-
+            $scope.timeline = [];
+            $scope.timelineHelper = timeline.getTimelineHelper();
+            console.log($scope.timelineHelper);
             clients.getClient($routeParams.clientId)
                     .then(
                             function (success) {
                                 $scope.client = success.data;
-                                //console.log(success.data);
+
+                                timeline.getClientTimeline($scope.client.id)
+                                        .then(
+                                                function (success) {
+                                                    timeline = timeline.parseTimeline(success.data);
+                                                    $scope.timeline = timeline;
+                                                });
+
                             },
                             function (error) {
                                 if (404 == error.status) {
@@ -102,7 +112,7 @@
                         .then(
                                 function (success) {
                                     $scope.showSaveClientFormMsg = true;
-                                    
+
                                     $timeout(function () {
                                         $scope.showSaveClientFormMsg = false;
                                     }, 5000);
@@ -113,8 +123,8 @@
                                 }
                         );
             };
-            
-            
+
+
 
         }]);
 })();

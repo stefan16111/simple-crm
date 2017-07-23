@@ -214,79 +214,24 @@
 
         <hr>
 
-        <p class="emtpy-timeline">Jeszcze nikt nie kontaktował się z tym klientem</p>
+        <p ng-show="timeline.length === 0" class="emtpy-timeline">Jeszcze nikt nie kontaktował się z tym klientem</p>
 
-        <ul class="timeline">
-            <li>
-                <i class="fa fa-file-text-o red"></i>
-                <span class="date">20-sty</span>
-
-                <div class="content">
-                    <p>
-                        <strong>Konstantyn Kowalski</strong> - podpisanie umowy z klientem dnia 20 stycznia 2015 o 12:00
-                    </p>
-
-                    <blockquote>
-                        <p>Cum sociis natoque penatibus et ultrices volutpat. Nullam wisi ultricies.</p>
-                    </blockquote>
-                </div>
-            </li>
-            <li>
-                <i class="fa fa-users purple"></i>
-                <span class="date">16-sty</span>
+        <ul class="timeline" ng-show="timeline.length > 0" >
+            <li ng-repeat="event in timeline">
+                <i class="fa fa-{{ event.contact_type }} {{ timelineHelper(event.contact_type, 'color') }}"></i>
+                <span class="date">{{ event.contact_date | date: 'dd-MMM' }}</span>
 
                 <div class="content">
                     <p>
-                        <strong>Łukasz Pawłowski</strong> - spotkanie z kilentem dnia 16 stycznia 2015 o 15:00
+                        <strong>{{ event.user_name }}</strong> - {{ timelineHelper(event.contact_type, 'message') }} dnia {{ event.contact_date | date: 'dd MMMM yyyy o H:mm' }}
                     </p>
 
                     <blockquote>
-                        <p>Quisque lorem tortor fringilla sed, vestibulum id, eleifend justo vel bibendum sapien massa ac turpis faucibus orci luctus non, consectetuer lobortis quis, varius in, purus.</p>
+                        <p>{{ event.notes }}</p>
                     </blockquote>
                 </div>
             </li>
-            <li>
-                <i class="fa fa-phone blue"></i>
-                <span class="date">16-sty</span>
 
-                <div class="content">
-                    <p>
-                        <strong>Zofia Jabłońska</strong> - telefon do klienta dnia 16 stycznia 2015 o 13:15
-                    </p>
-
-                    <blockquote>
-                        <p>Phasellus fermentum in, dolor. Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis velit, rhoncus eu.</p>
-                    </blockquote>
-                </div>
-            </li>
-            <li>
-                <i class="fa fa-envelope-o green"></i>
-                <span class="date">14-sty</span>
-
-                <div class="content">
-                    <p>
-                        <strong>Łukasz Pawłowski</strong> - wysyłka maila do klienta dnia 14 stycznia 2015 o 18:30
-                    </p>
-
-                    <blockquote>
-                        <p>Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis ac.</p>
-                    </blockquote>
-                </div>
-            </li>
-            <li>
-                <i class="fa fa-phone blue"></i>
-                <span class="date">12-sty</span>
-
-                <div class="content">
-                    <p>
-                        <strong>Konstantyn Kowalski</strong> - telefon do klienta dnia 12 stycznia 2015 o 12:00
-                    </p>
-
-                    <blockquote>
-                        <p>Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.</p>
-                    </blockquote>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
