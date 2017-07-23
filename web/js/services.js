@@ -98,6 +98,26 @@
                     message: 'podpisanie umowy z klientem'
                 }
             };
+
+            var eventTypes = [
+                {
+                    value: 'phone',
+                    name: 'Kontakt telefoniczny'
+                },
+                {
+                    value: 'envelope-o',
+                    name: 'Kontakt mailowy'
+                },
+                {
+                    value: 'users',
+                    name: 'Spotkanie'
+                },
+                {
+                    value: 'file-text-o',
+                    name: 'Podpisanie umowy'
+                }
+            ];
+
             var _timelineHelper = function (contactType, option) {
                 return helperOptions[contactType][option];
             };
@@ -115,13 +135,28 @@
                     element['contact_date'] = new Date(element['contact_date']);
                 });
                 return timeline;
-            }
+            };
+
+            var _addTimelineEvent = function (clientId, eventData) {
+                callback = callback || function () {};
+
+                return $http({
+                    method: 'POST',
+                    url: '/simple_crm/web/api.php/client/' + clientId + '/timeline',
+                    data: eventData
+                });
+            };
+
             return {
                 parseTimeline: _parseTimeline,
                 getClientTimeline: _getClientTimeline,
                 getTimelineHelper: function () {
                     return _timelineHelper;
-                }
+                },
+                getEventsType: function () {
+                    return eventTypes;
+                },
+                addTimelineEvent: _addTimelineEvent
             };
         }]);
 })();

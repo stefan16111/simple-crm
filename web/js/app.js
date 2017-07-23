@@ -69,13 +69,18 @@
         function ($scope, clients, users, sectors, $routeParams, $timeout, timeline) {
 
             $scope.client = {};
-            $scope.clientNotFound = false;
             $scope.users = [];
             $scope.sectors = [];
-            $scope.showSaveClientFormMsg = false;
+
             $scope.timeline = [];
             $scope.timelineHelper = timeline.getTimelineHelper();
-            console.log($scope.timelineHelper);
+            $scope.timelineEvent = {};
+            $scope.eventType = timeline.getEventsType();
+            $scope.newEventCreatedMsg = false;
+
+            $scope.clientNotFound = false;
+            $scope.showSaveClientFormMsg = false;
+
             clients.getClient($routeParams.clientId)
                     .then(
                             function (success) {
@@ -110,7 +115,7 @@
 
                 clients.updateClient($scope.client.id, $scope.client)
                         .then(
-                                function (success) {
+                                function () {
                                     $scope.showSaveClientFormMsg = true;
 
                                     $timeout(function () {
@@ -123,8 +128,25 @@
                                 }
                         );
             };
+            $scope.addEventTimeline = function () {
 
+                if ($scope.eventForm.$invalid)
+                    return;
 
+                timeline.addTimelineEvent($scope.client.id, $scope.timelineEvent, function (timeline) {
+                    $scope.timeline = timeline;
+                    $scope.timelineEvent = {};
+
+                    $scope.newEventCreatedMsg = true;
+                    $scope.eventForm.$setUntouched();
+                    $scope.eventForm.$submitted = false;
+
+                    $timeout(function () {
+                        $scope.newEventCreatedMsg = false;
+                    }, 5000);
+                });
+
+            };
 
         }]);
 })();
