@@ -85,8 +85,8 @@
             };
         }]);
 
-    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', 'timeline',
-        function ($scope, clients, users, sectors, $routeParams, $timeout, timeline) {
+    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', 'timeline', '$location',
+        function ($scope, clients, users, sectors, $routeParams, $timeout, timeline, $location) {
 
             $scope.client = {};
             $scope.users = [];
@@ -168,10 +168,24 @@
                                         $scope.newEventCreatedMsg = false;
                                     }, 5000);
                                 },
-                                function (error){
+                                function (error) {
                                     console.log(error);
                                 });
 
+            };
+
+            $scope.deleteClient = function () {
+                console.log('delete');
+
+                if (!confirm('Czy na pewno chcesz usunąć tego klineta ?'))
+                    return;
+
+                clients.deleteClient($scope.client.id)
+                        .then(
+                                function () {
+                                    alert('klient został poprawnie usunięty');
+                                    $location.path('/simple_crm/web/#/clients');
+                                });
             };
 
         }]);

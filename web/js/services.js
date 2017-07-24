@@ -33,10 +33,19 @@
                     data: clientData
                 });
             };
+
+            var _deleteClient = function (clientId) {
+                
+                return $http({
+                    method: 'DELETE',
+                    url: '/simple_crm/web/api.php/client/' + clientId
+                });
+            };
             return {
                 getClients: _getClients,
                 getClient: _getClient,
-                updateClient: _updateClient
+                updateClient: _updateClient,
+                deleteClient: _deleteClient
             };
         }]);
 
@@ -137,7 +146,7 @@
                 return timeline;
             };
 
-            var _addTimelineEvent = function (clientId, eventData) {
+            var _addTimelineEvent = function (clientId, eventData, callback) {
                 callback = callback || function () {};
 
                 return $http({
