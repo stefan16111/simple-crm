@@ -1,6 +1,15 @@
 (function () {
 
     var app = angular.module('crmService', []);
+    
+    app.factory('routeChecker', ['$location', function ($location) {
+            return {
+                isActive: function (location) {
+                    return (-1 !== $location.path().indexOf(location));
+                }
+            };
+    }]);
+    
     app.factory('clients', ['$http', function ($http) {
 
             var _getClients = function (callback) {

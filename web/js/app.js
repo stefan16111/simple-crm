@@ -1,29 +1,62 @@
 (function () {
 
-    var app = angular.module('crmApp', ['ngRoute', 'crmService', 'ngMessages']);
+    var app = angular.module('crmApp', ['ngRoute', 'crmService', 'ngMessages', 'ng-breadcrumbs']);
 
     app.config(['$routeProvider', '$locationProvider', '$qProvider', function ($routeProvider, $locationProvider, $qProvider) {
-    $qProvider.errorOnUnhandledRejections(false);
+            $qProvider.errorOnUnhandledRejections(false);
             $routeProvider
                     .when('/clients', {
                         controller: 'ClientsListCtrl',
-                        templateUrl: 'views/clients-list.html'
+                        templateUrl: 'views/clients-list.html',
+                        label: 'Lista klientów'
                     })
                     .when('/clients/:clientId', {
                         controller: 'ClientDetailCtrl',
-                        templateUrl: 'views/client-details.html'
+                        templateUrl: 'views/client-details.html',
+                        label: 'Karta klienta'
                     })
                     .when('/sectors', {
-                        templateUrl: 'views/sectors-list.html'
+                        controller: 'SectorsCtrl',
+                        templateUrl: 'views/simple-list.html',
+                        label: 'Lista branż'
                     })
                     .when('/users', {
-                        templateUrl: 'views/users-list.html'
+                        controller: 'UsersCtrl',
+                        templateUrl: 'views/simple-list.html',
+                        label: 'Lista pracowników'
                     })
                     .otherwise({
                         redirectTo: '/clients'
                     });
 
             $locationProvider.html5Mode(true).hashPrefix('');
+        }]);
+    
+    app.controller('MainCtrl', ['$scope', 'routeChecker', 'breadcrumbs', function ($scope, routeChecker, breadcrumbs) {
+            $scope.routeChecker = routeChecker;
+            $scope.breadcrumbs = breadcrumbs;
+    }]);
+
+    app.controller('SectorsCtrl', ['$scope', 'sectors', function ($scope, sectors) {
+            $scope.items = [];
+            $scope.filterBy = {};
+            $scope.listHeading = 'Lista branz';
+            
+            sectors.getSectors(function (sectors) {
+                $scope.items = sectors.data;
+            });
+
+        }]);
+    
+    app.controller('UsersCtrl', ['$scope', 'users', function ($scope, users) {
+            $scope.items = [];
+            $scope.filterBy = {};
+            $scope.listHeading = 'Lista pracowników';
+            
+            users.getUsers(function (users) {
+                $scope.items = users.data;
+            });
+
         }]);
 
     app.controller('ClientsListCtrl', ['$scope', 'clients', 'users', 'sectors', function ($scope, clients, users, sectors) {
@@ -134,7 +167,7 @@
             $scope.saveClientData = function () {
                 if ($scope.clientForm.$invalid)
                     return;
-                
+
                 if ('new' === $routeParams.clientId) {
 
                     clients.saveNewClient($scope.client)
@@ -158,11 +191,10 @@
             };
 
             $scope.addTimelineEvent = function () {
-console.log('time');
+
                 time.addTimelineEvent($scope.client.id, $scope.timelineEvent)
                         .then(
                                 function (data) {
-                                    console.log(data);
                                     $scope.timeline = data;
                                     $scope.timelineEvent = {};
 
