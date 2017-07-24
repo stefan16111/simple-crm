@@ -1,12 +1,10 @@
 (function () {
 
     var app = angular.module('crmService', []);
-
     app.factory('clients', ['$http', function ($http) {
 
             var _getClients = function (callback) {
                 callback = callback || function () {};
-
                 $http({
                     method: 'GET',
                     url: '/simple_crm/web/api.php/clients'
@@ -23,19 +21,25 @@
                     url: '/simple_crm/web/api.php/client/' + clientId
                 });
             };
-
             var _updateClient = function (clientId, clientData, callback) {
                 callback = callback || function () {};
-
                 return $http({
                     method: 'PUT',
                     url: '/simple_crm/web/api.php/client/' + clientId,
                     data: clientData
                 });
             };
-
+            var _saveNewClient = function (clientData) {
+                //callback = callback || function () {};
+                console.log(clientData);
+                return $http({
+                    method: 'POST',
+                    url: '/simple_crm/web/api.php/client/',
+                    data: clientData
+                });
+            };
             var _deleteClient = function (clientId) {
-                
+
                 return $http({
                     method: 'DELETE',
                     url: '/simple_crm/web/api.php/client/' + clientId
@@ -45,15 +49,14 @@
                 getClients: _getClients,
                 getClient: _getClient,
                 updateClient: _updateClient,
-                deleteClient: _deleteClient
+                deleteClient: _deleteClient,
+                saveNewClient: _saveNewClient
             };
         }]);
-
     app.factory('users', ['$http', function ($http) {
 
             var _getUsers = function (callback) {
                 callback = callback || function () {};
-
                 $http({
                     method: 'GET',
                     url: '/simple_crm/web/api.php/users'
@@ -67,12 +70,10 @@
                 getUsers: _getUsers
             };
         }]);
-
     app.factory('sectors', ['$http', function ($http) {
 
             var _getSectors = function (callback) {
                 callback = callback || function () {};
-
                 $http({
                     method: 'GET',
                     url: '/simple_crm/web/api.php/company-sectors'
@@ -86,7 +87,6 @@
                 getSectors: _getSectors
             };
         }]);
-
     app.factory('timeline', ['$http', function ($http) {
 
             var helperOptions = {
@@ -107,7 +107,6 @@
                     message: 'podpisanie umowy z klientem'
                 }
             };
-
             var eventTypes = [
                 {
                     value: 'phone',
@@ -126,11 +125,9 @@
                     name: 'Podpisanie umowy'
                 }
             ];
-
             var _timelineHelper = function (contactType, option) {
                 return helperOptions[contactType][option];
             };
-
             var _getClientTimeline = function (clientId, callback) {
                 callback = callback || function () {};
                 return $http({
@@ -138,24 +135,20 @@
                     url: '/simple_crm/web/api.php/client/' + clientId + '/timeline'
                 });
             };
-
             var _parseTimeline = function (timeline) {
                 angular.forEach(timeline, function (element, index) {
                     element['contact_date'] = new Date(element['contact_date']);
                 });
                 return timeline;
             };
-
             var _addTimelineEvent = function (clientId, eventData, callback) {
                 callback = callback || function () {};
-
                 return $http({
                     method: 'POST',
                     url: '/simple_crm/web/api.php/client/' + clientId + '/timeline',
                     data: eventData
                 });
             };
-
             return {
                 parseTimeline: _parseTimeline,
                 getClientTimeline: _getClientTimeline,
@@ -169,5 +162,4 @@
             };
         }]);
 })();
-
 //'/simple_crm/web/api.php/clients'

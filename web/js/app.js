@@ -101,25 +101,28 @@
             $scope.clientNotFound = false;
             $scope.showSaveClientFormMsg = false;
 
-            clients.getClient($routeParams.clientId)
-                    .then(
-                            function (success) {
-                                $scope.client = success.data;
+            if ('new' !== $routeParams.clientId) {
 
-                                timeline.getClientTimeline($scope.client.id)
-                                        .then(
-                                                function (success) {
-                                                    timeline = timeline.parseTimeline(success.data);
-                                                    $scope.timeline = timeline;
-                                                });
+                clients.getClient($routeParams.clientId)
+                        .then(
+                                function (success) {
+                                    $scope.client = success.data;
 
-                            },
-                            function (error) {
-                                if (404 == error.status) {
-                                    $scope.clientNotFound = true;
+                                    timeline.getClientTimeline($scope.client.id)
+                                            .then(
+                                                    function (success) {
+                                                        timeline = timeline.parseTimeline(success.data);
+                                                        $scope.timeline = timeline;
+                                                    });
+
+                                },
+                                function (error) {
+                                    if (404 == error.status) {
+                                        $scope.clientNotFound = true;
+                                    }
                                 }
-                            }
-                    );
+                        );
+            }
 
             users.getUsers(function (users) {
                 $scope.users = users.data;
@@ -132,27 +135,30 @@
             $scope.saveClientData = function () {
                 if ($scope.clientForm.$invalid)
                     return;
+                
+                if ('new' === $routeParams.clientId) {
 
-                clients.updateClient($scope.client.id, $scope.client)
-                        .then(
-                                function () {
-                                    $scope.showSaveClientFormMsg = true;
+                    clients.saveNewClient($scope.client)
+                            .then(
+                                    function () {
+                                        console.log($scope.client);
+                                        $location.path('/simple_crm/web/api.php/client/' + $scope.client.id);
+                                    });
+                } else {
+                    clients.updateClient($scope.client.id, $scope.client)
+                            .then(
+                                    function () {
+                                        $scope.showSaveClientFormMsg = true;
 
-                                    $timeout(function () {
-                                        $scope.showSaveClientFormMsg = false;
-                                    }, 5000);
-                                    //console.log(success.data);
-                                },
-                                function (error) {
-                                    console.log(error);
-                                }
-                        );
+                                        $timeout(function () {
+                                            $scope.showSaveClientFormMsg = false;
+                                        }, 5000);
+                                    }
+                            );
+                }
             };
 
-            $scope.addEvent = function () {
-
-                if ($scope.eventForm.$invalid)
-                    return;
+            $scope.addTimelineEvent = function () {
 
                 timeline.addTimelineEvent($scope.client.id, $scope.timelineEvent)
                         .then(
@@ -167,9 +173,6 @@
                                     $timeout(function () {
                                         $scope.newEventCreatedMsg = false;
                                     }, 5000);
-                                },
-                                function (error) {
-                                    console.log(error);
                                 });
 
             };
