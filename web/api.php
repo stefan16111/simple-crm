@@ -62,7 +62,7 @@ class DataProvider {
     {
         unset($data['id']);
 
-        $result = $this->db->insert('clients', $insertData);
+        $result = $this->db->insert('clients', $data);
 
         if(!$result){
             return false;
@@ -248,7 +248,7 @@ $app->post('/client/{clientId}/timeline', function (Request $request, $clientId)
 
     $timeline = $DataProvider->getClientTimeline($clientId);
 
-    return $app->json(['message' => 'Timeline Event created!', 'timeline' => $timeline]);
+    return $app->json($timeline);
 });
 
 $app->run();

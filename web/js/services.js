@@ -29,12 +29,11 @@
                     data: clientData
                 });
             };
-            var _saveNewClient = function (clientData) {
-                //callback = callback || function () {};
-                console.log(clientData);
+            var _saveNewClient = function (clientData, callback) {
+                callback = callback || function () {};
                 return $http({
                     method: 'POST',
-                    url: '/simple_crm/web/api.php/client/',
+                    url: '/simple_crm/web/api.php/client',
                     data: clientData
                 });
             };
@@ -87,7 +86,7 @@
                 getSectors: _getSectors
             };
         }]);
-    app.factory('timeline', ['$http', function ($http) {
+    app.factory('time', ['$http', function ($http) {
 
             var helperOptions = {
                 'phone': {

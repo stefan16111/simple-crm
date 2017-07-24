@@ -2,8 +2,8 @@
 
     var app = angular.module('crmApp', ['ngRoute', 'crmService', 'ngMessages']);
 
-    app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-
+    app.config(['$routeProvider', '$locationProvider', '$qProvider', function ($routeProvider, $locationProvider, $qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
             $routeProvider
                     .when('/clients', {
                         controller: 'ClientsListCtrl',
@@ -85,17 +85,17 @@
             };
         }]);
 
-    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', 'timeline', '$location',
-        function ($scope, clients, users, sectors, $routeParams, $timeout, timeline, $location) {
+    app.controller('ClientDetailCtrl', ['$scope', 'clients', 'users', 'sectors', '$routeParams', '$timeout', 'time', '$location',
+        function ($scope, clients, users, sectors, $routeParams, $timeout, time, $location) {
 
             $scope.client = {};
             $scope.users = [];
             $scope.sectors = [];
 
             $scope.timeline = [];
-            $scope.timelineHelper = timeline.getTimelineHelper();
+            $scope.timelineHelper = time.getTimelineHelper();
             $scope.timelineEvent = {};
-            $scope.eventTypes = timeline.getEventsType();
+            $scope.eventTypes = time.getEventsType();
             $scope.newEventCreatedMsg = false;
 
             $scope.clientNotFound = false;
@@ -108,13 +108,12 @@
                                 function (success) {
                                     $scope.client = success.data;
 
-                                    timeline.getClientTimeline($scope.client.id)
+                                    time.getClientTimeline($scope.client.id)
                                             .then(
                                                     function (success) {
-                                                        timeline = timeline.parseTimeline(success.data);
+                                                        timeline = time.parseTimeline(success.data);
                                                         $scope.timeline = timeline;
                                                     });
-
                                 },
                                 function (error) {
                                     if (404 == error.status) {
@@ -159,11 +158,12 @@
             };
 
             $scope.addTimelineEvent = function () {
-
-                timeline.addTimelineEvent($scope.client.id, $scope.timelineEvent)
+console.log('time');
+                time.addTimelineEvent($scope.client.id, $scope.timelineEvent)
                         .then(
-                                function () {
-                                    $scope.timeline = timeline;
+                                function (data) {
+                                    console.log(data);
+                                    $scope.timeline = data;
                                     $scope.timelineEvent = {};
 
                                     $scope.newEventCreatedMsg = true;
